@@ -66,8 +66,9 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* LIGHT MODE — soft ivory-on-forest version of the logo aesthetic */
+/* Single unified dark forest theme — no light mode */
 :root {
+  color-scheme: dark;
   --button-outline: rgba(255, 245, 220, .14);
   --badge-outline: rgba(255, 245, 220, .10);
   --opaque-button-border-intensity: 8;
@@ -215,18 +216,20 @@
 
 @layer base {
   * { @apply border-border; }
-  html, body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+  html {
+    background-color: hsl(150 45% 5%);
+    color-scheme: dark;
   }
   body {
     font-family: var(--app-font-serif);
     @apply antialiased;
+    color: hsl(var(--foreground));
     font-feature-settings: 'ss01', 'ss02', 'ss03', 'ss04', 'ss05';
+    background-color: hsl(150 45% 6%);
     background-image:
-      radial-gradient(ellipse 80% 60% at 20% 0%, hsl(150 60% 18% / .55), transparent 60%),
-      radial-gradient(ellipse 70% 50% at 100% 100%, hsl(150 70% 12% / .65), transparent 65%),
-      linear-gradient(180deg, hsl(150 40% 8%), hsl(150 45% 6%));
+      radial-gradient(ellipse 80% 60% at 20% 0%, hsl(150 55% 14% / .55), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 100% 100%, hsl(150 65% 9% / .65), transparent 65%),
+      linear-gradient(180deg, hsl(150 45% 7%), hsl(150 50% 5%));
     background-attachment: fixed;
     min-height: 100vh;
   }
@@ -234,6 +237,35 @@
     font-family: var(--app-font-serif);
     letter-spacing: -0.018em;
     font-weight: 600;
+  }
+  /* Brand-matched text selection — replaces default white selection */
+  ::selection {
+    background-color: hsl(42 75% 55% / 0.35);
+    color: hsl(42 35% 96%);
+  }
+  ::-moz-selection {
+    background-color: hsl(42 75% 55% / 0.35);
+    color: hsl(42 35% 96%);
+  }
+  /* Brand-matched scrollbar (WebKit) */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: hsl(150 45% 6%); }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(150 30% 18%);
+    border-radius: 8px;
+    border: 2px solid hsl(150 45% 6%);
+  }
+  ::-webkit-scrollbar-thumb:hover { background: hsl(42 60% 35%); }
+  /* Autofill — kill the white background browsers force */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-text-fill-color: hsl(var(--foreground));
+    -webkit-box-shadow: 0 0 0 1000px hsl(150 30% 12%) inset;
+    caret-color: hsl(var(--foreground));
+    transition: background-color 9999s ease-in-out 0s;
   }
   /* Use Inter only where dense data needs density */
   .font-data, table, code, kbd, samp, pre {
@@ -284,7 +316,15 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    text-shadow: 0 0 30px hsl(42 85% 50% / 0.20);
+  }
+  /* Glassy dark surface used in place of bg-white/X for outline buttons & overlays */
+  .gold-glass {
+    background-color: hsl(150 35% 10% / 0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .gold-glass:hover {
+    background-color: hsl(150 35% 14% / 0.7);
   }
   .gold-shimmer-text {
     background: linear-gradient(120deg,

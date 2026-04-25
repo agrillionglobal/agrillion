@@ -67,7 +67,7 @@ export default function Landing() {
             <h1 className="mt-6 font-serif text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight text-amber-50 leading-[1.02]">
               Pay your bills.
               <br />
-              <span className="gold-shimmer-text italic">Earn Smart Units.</span>
+              <span className="gold-text">Earn Smart Units.</span>
               <br />
               Grow Nigeria.
             </h1>
@@ -90,7 +90,7 @@ export default function Landing() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-amber-300/40 bg-white/5 text-amber-50 hover:bg-white/10 backdrop-blur h-12 px-7"
+                  className="border-amber-300/40 gold-glass text-amber-50 backdrop-blur h-12 px-7"
                 >
                   Open dashboard demo
                 </Button>
@@ -284,7 +284,7 @@ export default function Landing() {
               <a href={EXTERNAL_SITES.smart.url} target="_blank" rel="noopener noreferrer">
                 <Button
                   variant="outline"
-                  className="border-amber-300/40 bg-white/5 text-amber-50 hover:bg-white/10"
+                  className="border-amber-300/40 gold-glass text-amber-50"
                 >
                   Explore Smart
                   <ExternalLink className="ml-2 h-4 w-4" />
@@ -392,7 +392,7 @@ export default function Landing() {
               <a href={EXTERNAL_SITES.mart.url} target="_blank" rel="noopener noreferrer">
                 <Button
                   variant="outline"
-                  className="border-amber-300/40 bg-white/5 text-amber-50 hover:bg-white/10"
+                  className="border-amber-300/40 gold-glass text-amber-50"
                 >
                   Explore Agrillion Mart
                   <ExternalLink className="ml-2 h-4 w-4" />
@@ -425,7 +425,7 @@ export default function Landing() {
               <Link href="/tech">
                 <Button
                   variant="outline"
-                  className="border-amber-300/40 bg-white/5 text-amber-50 hover:bg-white/10"
+                  className="border-amber-300/40 gold-glass text-amber-50"
                 >
                   View all projects
                 </Button>
@@ -619,7 +619,7 @@ export default function Landing() {
                 <Leaf className="h-4 w-4" />
               </div>
               <h2 className="mt-6 font-serif text-3xl md:text-5xl font-semibold tracking-tight text-amber-50">
-                Your bills can do <span className="gold-shimmer-text italic">more.</span>
+                Your bills can do <span className="gold-text">more.</span>
               </h2>
               <p className="mt-5 text-amber-100/75 max-w-xl mx-auto">
                 Join the Agrillion membership free of charge. Pay your first bill, earn your
@@ -639,7 +639,7 @@ export default function Landing() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-amber-300/40 bg-white/5 text-amber-50 hover:bg-white/10 h-12 px-8"
+                    className="border-amber-300/40 gold-glass text-amber-50 h-12 px-8"
                   >
                     Sign in
                   </Button>

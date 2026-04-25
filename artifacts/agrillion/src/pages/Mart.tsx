@@ -151,7 +151,7 @@ export default function Mart() {
                       />
                     )}
                     <div className="absolute top-3 left-3">
-                      <Badge variant="secondary" className="bg-white/90 dark:bg-black/60 backdrop-blur text-xs">
+                      <Badge variant="secondary" className="bg-emerald-950/70 backdrop-blur text-xs">
                         {p.category}
                       </Badge>
                     </div>

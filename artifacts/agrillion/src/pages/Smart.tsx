@@ -183,7 +183,7 @@ export default function Smart() {
             <p className="mt-1 text-xs text-amber-100/60">
               1 Smart Unit = ₦{summary.data?.unitValueNgn ?? 1}
             </p>
-            <Button variant="ghost" className="mt-4 -ml-3 text-amber-200 hover:bg-white/5">
+            <Button variant="ghost" className="mt-4 -ml-3 text-amber-200 hover:bg-emerald-900/40">
               Top up wallet
             </Button>
           </CardContent>

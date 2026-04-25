@@ -109,7 +109,7 @@ export default function Dashboard() {
                   <Wallet className="h-5 w-5 text-amber-300" />
                 </div>
               </div>
-              <Button variant="ghost" className="mt-6 -ml-3 text-amber-200 hover:text-amber-100 hover:bg-white/5">
+              <Button variant="ghost" className="mt-6 -ml-3 text-amber-200 hover:text-amber-100 hover:bg-emerald-900/40">
                 Top up wallet <ArrowUpRight className="ml-1 h-4 w-4" />
               </Button>
             </CardContent>
