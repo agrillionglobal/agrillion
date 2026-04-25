@@ -1,0 +1,79 @@
+uploads = []
+
+[[generated]]
+id = "HSggtUuYMoMRfD4IEXxAk"
+uri = "file://artifacts/agrillion/public/hero-1-payments.png"
+type = "image"
+title = "hero payments smartphone"
+
+[[generated]]
+id = "uNe3Od5lgYvEx2pKQXY9e"
+uri = "file://artifacts/agrillion/public/hero-2-mart.png"
+type = "image"
+title = "hero nigerian agro marketplace"
+
+[[generated]]
+id = "vXAO8ckIzYj0AYKvCN7o1"
+uri = "file://artifacts/agrillion/public/hero-3-projects.png"
+type = "image"
+title = "hero rice mill project"
+
+[[generated]]
+id = "tsl6fY0Hc_A-477L8OMvH"
+uri = "file://artifacts/agrillion/public/hero-4-farmer.png"
+type = "image"
+title = "hero farmer hands rice"
+
+[[generated]]
+id = "IQYKZLMEY1Z8NkzLxNXQK"
+uri = "file://artifacts/agrillion/public/section-mart.png"
+type = "image"
+title = "section nigerian produce flatlay"
+
+[[generated]]
+id = "A2UqufS2gG5sdpNNik_h7"
+uri = "file://artifacts/agrillion/public/section-smart.png"
+type = "image"
+title = "section smart phone bills"
+
+[[generated]]
+id = "IqFlGTzQKJ0dyUBTdKddi"
+uri = "file://artifacts/agrillion/public/project-cassava.png"
+type = "image"
+title = "project cassava plant"
+
+[[generated]]
+id = "_X4LyyBL3PvarZ7CgORNk"
+uri = "file://artifacts/agrillion/public/project-coldstorage.png"
+type = "image"
+title = "project cold storage"
+
+[[generated]]
+id = "WKdO21E6Z0VK89t2P3RGh"
+uri = "file://artifacts/agrillion/public/product-ofada.png"
+type = "image"
+title = "product ofada rice"
+
+[[generated]]
+id = "fLxWwxVKeFjDQ-CgzkEZO"
+uri = "file://artifacts/agrillion/public/product-palmoil.png"
+type = "image"
+title = "product palm oil"
+
+[[outputs]]
+id = "R2W-Z-bPo7mXCNF-GAUaX"
+uri = "file://attached_assets/stock_images/chicken_farm.jpg"
+type = "image"
+title = "free range Nigerian chicken in farm dark moody"
+
+[[outputs]]
+id = "Y0bXcpfxCJZuWKwhJs8hG"
+uri = "file://attached_assets/stock_images/honey_jar.jpg"
+type = "image"
+title = "jar of golden honey with honeycomb dark moody"
+
+[[outputs]]
+id = "Wl_xykA-XJEt1x41VM47Y"
+uri = "file://attached_assets/stock_images/rice_mill.jpg"
+type = "image"
+title = "modern industrial rice mill agricultural processing facility"

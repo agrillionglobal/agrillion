@@ -2,8 +2,8 @@ import { Link } from "wouter";
 import { motion } from "framer-motion";
 import { PublicShell } from "@/components/PublicShell";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Logo } from "@/components/Logo";
+import { HeroSlider } from "@/components/HeroSlider";
 import { useGetImpactMetrics, useListProjects } from "@workspace/api-client-react";
 import { num } from "@/lib/format";
 import { EXTERNAL_SITES } from "@/lib/external-sites";
@@ -42,26 +42,16 @@ export default function Landing() {
   return (
     <PublicShell>
       {/* HERO ──────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 forest-gradient" />
-        <div className="absolute inset-0 leaf-motif" />
-        {/* large soft gold radial glow behind text */}
+      <section className="relative overflow-hidden min-h-[760px]">
+        <HeroSlider />
+        {/* gold radial glow accent over slider */}
         <div
-          className="absolute -top-40 -left-40 h-[640px] w-[640px] rounded-full opacity-40 blur-3xl"
+          className="absolute -top-40 -left-40 h-[520px] w-[520px] rounded-full opacity-30 blur-3xl pointer-events-none"
           style={{
             background:
-              "radial-gradient(circle, hsl(42 85% 50% / .35), transparent 65%)",
+              "radial-gradient(circle, hsl(42 85% 50% / .45), transparent 65%)",
           }}
         />
-        {/* faint emerald glow on right */}
-        <div
-          className="absolute -bottom-40 -right-40 h-[700px] w-[700px] rounded-full opacity-50 blur-3xl"
-          style={{
-            background:
-              "radial-gradient(circle, hsl(150 60% 30% / .35), transparent 65%)",
-          }}
-        />
-        <div className="absolute inset-0 vignette" />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-28 md:pt-28 md:pb-36">
           <motion.div
@@ -124,52 +114,49 @@ export default function Landing() {
             </div>
           </motion.div>
 
-          {/* Floating logo card — gold framed, with halo */}
+          {/* Floating logo badge — sits on top-right above slider */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.92, rotate: -3 }}
-            animate={{ opacity: 1, scale: 1, rotate: -1.5 }}
+            initial={{ opacity: 0, scale: 0.92, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.2 }}
-            className="hidden lg:block absolute right-12 top-20 w-[360px]"
+            className="hidden md:block absolute right-8 lg:right-12 top-16 w-[260px] lg:w-[300px]"
           >
-            {/* gold glow halo */}
-            <div className="absolute -inset-10 rounded-[40px] gold-glow opacity-80" />
-            {/* gold gradient frame */}
-            <div className="relative rounded-[28px] gold-gradient p-[2px] gold-ring-strong rotate-2">
-              <div className="rounded-[26px] bg-emerald-950 p-3">
+            <div className="absolute -inset-8 rounded-[40px] gold-glow opacity-60" />
+            <div className="relative rounded-[24px] gold-gradient p-[2px] gold-ring-strong">
+              <div className="rounded-[22px] bg-emerald-950/95 backdrop-blur-md p-3">
                 <img
                   src={`${BASE}/agrillion-logo.jpeg`}
                   alt="Agrillion"
-                  className="w-full rounded-[20px] object-cover aspect-square"
+                  className="w-full rounded-[16px] object-cover aspect-square"
                 />
-                <div className="mt-4 mb-2 text-center">
-                  <p className="font-serif text-lg font-semibold gold-text">
+                <div className="mt-3 mb-1 text-center">
+                  <p className="font-serif text-sm lg:text-base font-semibold gold-text">
                     Member-owned. Reward-driven.
                   </p>
-                  <div className="ornament-divider mt-3 mx-6 text-[10px]">
+                  <div className="ornament-divider mt-2 mx-6 text-[10px]">
                     <Leaf className="h-3 w-3" />
                   </div>
-                  <p className="mt-2 text-[11px] uppercase tracking-[0.22em] text-amber-100/60">
+                  <p className="mt-1 text-[10px] uppercase tracking-[0.22em] text-amber-100/60">
                     Est. 2025 · Lagos
                   </p>
                 </div>
               </div>
             </div>
-            {/* SU floating chip */}
             <motion.div
               initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.8, duration: 0.6 }}
-              className="absolute -bottom-6 -left-10 rounded-2xl bg-emerald-950/90 backdrop-blur p-4 ring-1 ring-amber-400/40 shadow-[0_18px_50px_-10px_hsl(42_85%_30%/0.6)]"
+              className="absolute -bottom-5 -left-8 rounded-2xl bg-emerald-950/90 backdrop-blur p-3.5 ring-1 ring-amber-400/40 shadow-[0_18px_50px_-10px_hsl(42_85%_30%/0.6)]"
             >
-              <div className="flex items-center gap-3">
-                <div className="rounded-full gold-gradient p-2">
-                  <TrendingUp className="h-4 w-4 text-emerald-950" />
+              <div className="flex items-center gap-2.5">
+                <div className="rounded-full gold-gradient p-1.5">
+                  <TrendingUp className="h-3.5 w-3.5 text-emerald-950" />
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-amber-100/60">
+                  <p className="text-[9px] uppercase tracking-[0.18em] text-amber-100/60">
                     You earned
                   </p>
-                  <p className="font-serif text-lg font-semibold gold-text">+60 SU</p>
+                  <p className="font-serif text-base font-semibold gold-text">+60 SU</p>
                 </div>
               </div>
             </motion.div>
@@ -347,38 +334,22 @@ export default function Landing() {
           >
             <div className="grid grid-cols-2 gap-4">
               {[
-                {
-                  name: "Ofada Rice",
-                  price: "₦12,500",
-                  units: "or 1,250 SU",
-                  grad: "from-emerald-700 to-emerald-950",
-                },
-                {
-                  name: "Palm Oil 5L",
-                  price: "₦18,500",
-                  units: "or 1,850 SU",
-                  grad: "from-amber-600 to-amber-900",
-                },
-                {
-                  name: "Free-Range Chicken",
-                  price: "₦85,000",
-                  units: "or 8,500 SU",
-                  grad: "from-rose-800 to-rose-950",
-                },
-                {
-                  name: "Mambilla Honey",
-                  price: "₦11,500",
-                  units: "or 1,150 SU",
-                  grad: "from-yellow-600 to-amber-800",
-                },
+                { name: "Ofada Rice", price: "₦12,500", units: "or 1,250 SU", img: `${BASE}/product-ofada.png` },
+                { name: "Palm Oil 5L", price: "₦18,500", units: "or 1,850 SU", img: `${BASE}/product-palmoil.png` },
+                { name: "Free-Range Chicken", price: "₦85,000", units: "or 8,500 SU", img: `${BASE}/product-chicken.jpg` },
+                { name: "Mambilla Honey", price: "₦11,500", units: "or 1,150 SU", img: `${BASE}/product-honey.jpg` },
               ].map((p) => (
                 <div
                   key={p.name}
-                  className="overflow-hidden rounded-2xl premium-card hover-elevate"
+                  className="group overflow-hidden rounded-2xl premium-card hover-elevate"
                 >
-                  <div
-                    className={`aspect-[4/3] bg-gradient-to-br ${p.grad} relative leaf-motif`}
-                  >
+                  <div className="aspect-[4/3] relative overflow-hidden">
+                    <img
+                      src={p.img}
+                      alt={p.name}
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-transparent to-transparent" />
                     <div className="absolute bottom-2 left-2 rounded-full gold-gradient px-2.5 py-0.5 text-[10px] font-semibold text-emerald-950">
                       In stock
                     </div>
@@ -468,7 +439,13 @@ export default function Landing() {
             </div>
           </div>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {(projects.data ?? []).slice(0, 3).map((p, i) => (
+            {(projects.data ?? []).slice(0, 3).map((p, i) => {
+              const projectImgs = [
+                `${BASE}/project-ricemill.jpg`,
+                `${BASE}/project-cassava.png`,
+                `${BASE}/project-coldstorage.png`,
+              ];
+              return (
               <motion.div
                 key={p.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -476,8 +453,14 @@ export default function Landing() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.1 }}
               >
-                <div className="overflow-hidden h-full premium-card hover-elevate">
-                  <div className="aspect-[16/10] forest-gradient relative leaf-motif">
+                <div className="group overflow-hidden h-full premium-card hover-elevate">
+                  <div className="aspect-[16/10] relative overflow-hidden">
+                    <img
+                      src={projectImgs[i]}
+                      alt={p.name}
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/60 to-emerald-950/10" />
                     <div className="absolute inset-0 flex items-end p-5">
                       <div>
                         <p className="text-[10px] uppercase tracking-[0.22em] text-amber-300">
@@ -510,7 +493,8 @@ export default function Landing() {
                   </div>
                 </div>
               </motion.div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
