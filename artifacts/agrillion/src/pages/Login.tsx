@@ -3,6 +3,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent } from "@/components/ui/card";
@@ -51,9 +52,11 @@ export default function Login() {
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
                 <Label htmlFor="pwd">Password</Label>
-                <a href="#" className="text-xs text-primary hover:underline">Forgot?</a>
+                <Link href="/forgot-password" className="text-xs text-primary hover:underline">
+                  Forgot password or ID?
+                </Link>
               </div>
-              <Input id="pwd" type="password" placeholder="••••••••" defaultValue="demo1234" className="h-11" required />
+              <PasswordInput id="pwd" placeholder="••••••••" defaultValue="demo1234" className="h-11" required />
             </div>
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-2 text-sm text-muted-foreground">

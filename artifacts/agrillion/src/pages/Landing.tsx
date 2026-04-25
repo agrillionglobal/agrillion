@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Logo } from "@/components/Logo";
 import { useGetImpactMetrics, useListProjects } from "@workspace/api-client-react";
 import { num } from "@/lib/format";
+import { EXTERNAL_SITES } from "@/lib/external-sites";
 import {
   Wallet,
   Store,
@@ -20,6 +21,7 @@ import {
   Sparkles,
   TrendingUp,
   Quote,
+  ExternalLink,
 } from "lucide-react";
 
 const BASE = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
@@ -142,7 +144,7 @@ export default function Landing() {
             </h2>
             <p className="mt-4 text-muted-foreground">
               Every bill payment generates a small platform margin. We share a portion of that
-              margin back to you as Smart Units — a non-monetary reward redeemable on the Mart.
+              margin back to you as Smart Units — a non-monetary reward redeemable on the Agrillion Mart.
               No locked-in capital, no monthly fees, no jargon.
             </p>
           </div>
@@ -164,7 +166,7 @@ export default function Landing() {
               },
               {
                 step: "03",
-                title: "Spend on the Mart",
+                title: "Spend on Agrillion Mart",
                 description:
                   "Redeem Smart Units for Nigerian agro-produce, farm inputs and equipment — fully, partially, or alongside cash.",
                 icon: Store,
@@ -226,12 +228,20 @@ export default function Landing() {
                 </div>
               ))}
             </div>
-            <Link href="/smart">
-              <Button className="mt-7 bg-primary text-primary-foreground hover:bg-primary/90">
-                Explore Smart
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link href="/smart">
+                <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+                  Open Smart Wallet
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+              <a href={EXTERNAL_SITES.smart.url} target="_blank" rel="noopener noreferrer">
+                <Button variant="outline">
+                  Explore Smart
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </Button>
+              </a>
+            </div>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, x: 20 }}
@@ -252,7 +262,7 @@ export default function Landing() {
                   >
                     <Icon className="h-6 w-6 text-foreground/80" />
                     <p className="mt-3 font-medium">{s.name}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">3-5% reward margin</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">1-3% reward margin</p>
                   </motion.div>
                 );
               })}
@@ -298,7 +308,7 @@ export default function Landing() {
             viewport={{ once: true }}
             className="order-1 md:order-2"
           >
-            <p className="text-xs uppercase tracking-[0.2em] text-primary">Mart</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-primary">Agrillion Mart</p>
             <h2 className="mt-2 font-serif text-3xl md:text-4xl font-semibold tracking-tight">
               The Nigerian agro-marketplace.
             </h2>
@@ -307,12 +317,20 @@ export default function Landing() {
               directly from cooperatives and Agrillion-backed projects. Pay with cash, Smart
               Units, or a satisfying split of both.
             </p>
-            <Link href="/mart">
-              <Button className="mt-7 bg-primary text-primary-foreground hover:bg-primary/90">
-                Browse Mart
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link href="/mart">
+                <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+                  Open Agrillion Mart
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+              <a href={EXTERNAL_SITES.mart.url} target="_blank" rel="noopener noreferrer">
+                <Button variant="outline">
+                  Explore Agrillion Mart
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </Button>
+              </a>
+            </div>
           </motion.div>
         </div>
       </section>
@@ -332,9 +350,17 @@ export default function Landing() {
                 across Nigeria.
               </p>
             </div>
-            <Link href="/tech">
-              <Button variant="outline">View all projects</Button>
-            </Link>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/tech">
+                <Button variant="outline">View all projects</Button>
+              </Link>
+              <a href={EXTERNAL_SITES.tech.url} target="_blank" rel="noopener noreferrer">
+                <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+                  Explore Tech
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </Button>
+              </a>
+            </div>
           </div>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {(projects.data ?? []).slice(0, 3).map((p, i) => (
@@ -427,7 +453,7 @@ export default function Landing() {
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {[
               { name: "Adaeze Okoye", loc: "Lagos · Premier member", q: "I pay my DStv and electricity here — and three months later I bought a year's supply of palm oil with the Smart Units I earned. It's such a beautiful thing." },
-              { name: "Tunde Bakare", loc: "Abuja · Member", q: "The Mart prices are honest and the payment options are flexible. Splitting cash and Smart Units feels like a small superpower." },
+              { name: "Tunde Bakare", loc: "Abuja · Member", q: "The Agrillion Mart prices are honest and the payment options are flexible. Splitting cash and Smart Units feels like a small superpower." },
               { name: "Ifeoma Eze", loc: "Port Harcourt · Partner", q: "What I love most is being able to follow the projects I help fund. The cold storage hub update last week was inspiring." },
             ].map((t, i) => (
               <motion.div

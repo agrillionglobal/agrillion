@@ -38,7 +38,7 @@ Authenticated app shell:
 
 ### Theme
 
-Custom palette: deep forest green (`hsl(150 35% 12%)`), brushed gold (`hsl(42 75% 55%)`), and ivory (`hsl(42 38% 97%)`) with full dark-mode support. Inter for body text, Fraunces for serif headings. Utility classes `.gold-gradient`, `.gold-text`, `.forest-gradient`, `.ivory-grain`, and `.leaf-motif` provide the brand aesthetic.
+Custom palette: deep forest green (`hsl(150 35% 12%)`), brushed gold (`hsl(42 75% 55%)`), and ivory (`hsl(42 38% 97%)`) with full dark-mode support. Inter for body text, Fraunces for serif headings. Utility classes `.gold-gradient`, `.gold-text`, `.forest-gradient`, `.ivory-grain`, and `.leaf-motif` provide the brand aesthetic. `ThemeProvider` (`src/lib/theme.tsx`) toggles the `.dark` class on `<html>` and persists choice in `localStorage` (`agrillion-theme`); a tiny inline script in `index.html` applies the saved theme before paint to avoid FOUC.
 
 ### API client wiring
 

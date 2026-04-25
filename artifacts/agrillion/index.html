@@ -11,6 +11,17 @@
     <meta name="description" content="Agrillion — Pay your bills, earn Smart Units, grow Nigeria. A regulation-safe rewards-and-utility platform with a Nigerian agro-marketplace.">
   </head>
   <body>
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('agrillion-theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var dark = stored ? stored === 'dark' : prefersDark;
+          if (dark) document.documentElement.classList.add('dark');
+          document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+        } catch (e) {}
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

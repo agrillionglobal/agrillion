@@ -3,6 +3,7 @@ import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/Logo";
 import {
@@ -94,22 +95,40 @@ export default function Register() {
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="pwd">Password</Label>
-                <Input id="pwd" type="password" placeholder="At least 8 characters" required className="h-11" />
+                <PasswordInput id="pwd" placeholder="At least 8 characters" required className="h-11" />
+                <p className="text-[11px] text-muted-foreground">
+                  Tap the eye icon to confirm what you typed.
+                </p>
               </div>
             </div>
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <Label htmlFor="pin">4-digit wallet PIN</Label>
-                <Input id="pin" inputMode="numeric" maxLength={4} placeholder="••••" required className="h-11 tracking-[0.5em] font-mono text-center" />
+                <PasswordInput id="pin" inputMode="numeric" maxLength={4} placeholder="••••" required className="h-11 tracking-[0.5em] font-mono text-center" />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="ref">Referral code (optional)</Label>
                 <Input id="ref" placeholder="e.g. AGRO2026" className="h-11" />
               </div>
             </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="nin">NIN (optional, verify later)</Label>
+                <Input id="nin" inputMode="numeric" maxLength={11} placeholder="11-digit NIN" className="h-11 font-mono tracking-[0.18em]" />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="bvn">BVN (optional, verify later)</Label>
+                <Input id="bvn" inputMode="numeric" maxLength={11} placeholder="11-digit BVN" className="h-11 font-mono tracking-[0.18em]" />
+              </div>
+            </div>
             <div className="rounded-xl bg-muted/60 p-4 text-sm text-muted-foreground">
               Your Membership ID will be auto-generated based on your state and LGA — for example
-              <span className="ml-1 font-mono text-foreground">AGP-LA-IKE-000245</span>.
+              <span className="ml-1 font-mono text-foreground">AGP-LA-IKE-000245</span>. NIN/BVN
+              verification can be completed any time from{" "}
+              <Link href="/verify" className="text-primary hover:underline">
+                Identity & Security
+              </Link>
+              .
             </div>
             <Button type="submit" size="lg" disabled={busy} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
               {busy ? "Creating account..." : "Create my account"}

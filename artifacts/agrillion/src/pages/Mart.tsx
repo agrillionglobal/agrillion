@@ -94,7 +94,7 @@ export default function Mart() {
   return (
     <AppShell>
       <PageHeader
-        eyebrow="Mart"
+        eyebrow="Agrillion Mart"
         title="The Agrillion marketplace."
         description="Premium Nigerian-grown produce, farm inputs and equipment — sourced directly from cooperatives. Pay with cash, Smart Units, or both."
         actions={

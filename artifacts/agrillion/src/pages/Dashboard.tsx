@@ -45,7 +45,7 @@ const QUICK = [
   { label: "Cable TV", icon: Tv, to: "/smart?cat=cable" },
   { label: "Electricity", icon: Zap, to: "/smart?cat=electricity" },
   { label: "Internet", icon: Wifi, to: "/smart?cat=internet" },
-  { label: "Visit Mart", icon: Store, to: "/mart" },
+  { label: "Visit Agrillion Mart", icon: Store, to: "/mart" },
   { label: "Projects", icon: Sprout, to: "/tech" },
 ];
 
@@ -90,7 +90,7 @@ export default function Dashboard() {
         </div>
         <div className="flex items-center gap-2">
           <Link href="/smart"><Button variant="outline">Pay a bill</Button></Link>
-          <Link href="/mart"><Button className="bg-primary text-primary-foreground hover:bg-primary/90">Visit Mart</Button></Link>
+          <Link href="/mart"><Button className="bg-primary text-primary-foreground hover:bg-primary/90">Visit Agrillion Mart</Button></Link>
         </div>
       </motion.div>
 
@@ -103,7 +103,7 @@ export default function Dashboard() {
                 <div>
                   <p className="text-xs uppercase tracking-[0.18em] text-amber-300/80">Cash wallet</p>
                   <p className="mt-3 font-serif text-3xl md:text-4xl font-semibold">{naira(data.wallet.cashBalance)}</p>
-                  <p className="mt-1 text-xs text-amber-100/60">Available for bills & Mart</p>
+                  <p className="mt-1 text-xs text-amber-100/60">Available for bills & Agrillion Mart</p>
                 </div>
                 <div className="rounded-xl bg-amber-400/15 p-2.5 ring-1 ring-amber-300/30">
                   <Wallet className="h-5 w-5 text-amber-300" />
@@ -154,7 +154,7 @@ export default function Dashboard() {
                 <p className="mt-2 font-serif text-2xl font-semibold">{data.utilityPurchasesThisMonth}</p>
               </div>
               <div>
-                <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Mart orders</p>
+                <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Agrillion Mart orders</p>
                 <p className="mt-2 font-serif text-2xl font-semibold">{data.martOrdersCount}</p>
               </div>
               <div>
@@ -327,7 +327,7 @@ export default function Dashboard() {
                 })}
               </ul>
             ) : (
-              <EmptyState title="No activity yet" description="Pay your first bill or visit Mart to get started." />
+              <EmptyState title="No activity yet" description="Pay your first bill or visit Agrillion Mart to get started." />
             )}
           </CardContent>
         </Card>

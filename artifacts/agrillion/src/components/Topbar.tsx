@@ -1,6 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { useState } from "react";
 import { Logo } from "./Logo";
+import { ThemeToggle } from "./ThemeToggle";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -26,6 +27,7 @@ import {
   Store,
   Sprout,
   Shield,
+  ShieldCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useGetMyMember, useListNotifications } from "@workspace/api-client-react";
@@ -34,8 +36,9 @@ import { initials, relativeDate } from "@/lib/format";
 const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/smart", label: "Smart", icon: Wallet },
-  { to: "/mart", label: "Mart", icon: Store },
+  { to: "/mart", label: "Agrillion Mart", icon: Store },
   { to: "/tech", label: "Tech", icon: Sprout },
+  { to: "/verify", label: "Verify", icon: ShieldCheck },
   { to: "/admin", label: "Admin", icon: Shield },
 ];
 
@@ -76,6 +79,7 @@ export function Topbar() {
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
+          <ThemeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="relative">
@@ -155,6 +159,9 @@ export function Topbar() {
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setLocation("/smart")}>
                 Smart Wallet
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLocation("/verify")}>
+                Identity & Security
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setLocation("/admin")}>
                 Admin Console
