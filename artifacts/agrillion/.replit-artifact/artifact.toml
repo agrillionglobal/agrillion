@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Agrillion"
+version = "1.0.0"
+id = "artifacts/agrillion"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25632
+
+[services.development]
+run = "pnpm --filter @workspace/agrillion run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/agrillion", "run", "build" ]
+publicDir = "artifacts/agrillion/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25632"
+BASE_PATH = "/"

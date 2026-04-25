@@ -3,20 +3,35 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Agrillion API — rewards & utility ecosystem
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: members
+    description: Member account & profile
+  - name: wallet
+    description: Cash wallet & Smart Units wallet
+  - name: utilities
+    description: Utility payments (airtime, data, cable, electricity, internet)
+  - name: smart-units
+    description: Smart Units ledger, transfers, history
+  - name: mart
+    description: Mart marketplace products & orders
+  - name: tech
+    description: Tech portal — agro project transparency
+  - name: dashboard
+    description: Aggregated dashboard summaries
+  - name: admin
+    description: Admin operations & settings
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,13 +39,731 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /members/me:
+    get:
+      operationId: getMyMember
+      tags: [members]
+      summary: Current member profile
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Member"
+
+  /wallet:
+    get:
+      operationId: getWallet
+      tags: [wallet]
+      summary: Cash + Smart Units wallet snapshot
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WalletSummary"
+
+  /smart-units/summary:
+    get:
+      operationId: getSmartUnitsSummary
+      tags: [smart-units]
+      summary: Aggregated Smart Units stats (total, earned this month, used, pending)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SmartUnitsSummary"
+
+  /smart-units/ledger:
+    get:
+      operationId: listSmartUnitsLedger
+      tags: [smart-units]
+      summary: Smart Units ledger entries
+      parameters:
+        - in: query
+          name: limit
+          schema: { type: integer, default: 50 }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SmartUnitsLedgerEntry"
+
+  /smart-units/transfer:
+    post:
+      operationId: transferSmartUnits
+      tags: [smart-units]
+      summary: Transfer Smart Units to another member
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransferUnitsBody"
+      responses:
+        "200":
+          description: Transfer completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransferResult"
+
+  /utilities/services:
+    get:
+      operationId: listUtilityServices
+      tags: [utilities]
+      summary: Available utility services & providers
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UtilityService"
+
+  /utilities/transactions:
+    get:
+      operationId: listUtilityTransactions
+      tags: [utilities]
+      summary: Member's utility transactions
+      parameters:
+        - in: query
+          name: limit
+          schema: { type: integer, default: 50 }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UtilityTransaction"
+    post:
+      operationId: createUtilityTransaction
+      tags: [utilities]
+      summary: Pay a utility bill (earns Smart Units)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUtilityTxnRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UtilityTransactionResult"
+
+  /mart/products:
+    get:
+      operationId: listMartProducts
+      tags: [mart]
+      summary: Marketplace products
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MartProduct"
+
+  /mart/orders:
+    get:
+      operationId: listMartOrders
+      tags: [mart]
+      summary: Member's mart orders
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MartOrder"
+    post:
+      operationId: createMartOrder
+      tags: [mart]
+      summary: Place a mart order (cash, units, or split)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateMartOrderRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MartOrder"
+
+  /tech/projects:
+    get:
+      operationId: listProjects
+      tags: [tech]
+      summary: Agro projects (transparency portal)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AgroProject"
+
+  /tech/projects/{projectId}:
+    get:
+      operationId: getProject
+      tags: [tech]
+      summary: Agro project detail (with milestones & updates)
+      parameters:
+        - in: path
+          name: projectId
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgroProjectDetail"
+
+  /tech/impact:
+    get:
+      operationId: getImpactMetrics
+      tags: [tech]
+      summary: Aggregated impact metrics across all agro projects
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImpactMetrics"
+
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Member dashboard overview
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  /dashboard/activity:
+    get:
+      operationId: getRecentActivity
+      tags: [dashboard]
+      summary: Recent unified activity feed
+      parameters:
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ActivityItem"
+
+  /dashboard/notifications:
+    get:
+      operationId: listNotifications
+      tags: [dashboard]
+      summary: Member notifications
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+
+  /admin/overview:
+    get:
+      operationId: getAdminOverview
+      tags: [admin]
+      summary: Admin platform overview (members, revenue, units circulating)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminOverview"
+
+  /admin/members:
+    get:
+      operationId: listAdminMembers
+      tags: [admin]
+      summary: All members for admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AdminMember"
+
+  /admin/transactions:
+    get:
+      operationId: listAdminTransactions
+      tags: [admin]
+      summary: All utility transactions for admin
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UtilityTransaction"
+
+  /admin/revenue:
+    get:
+      operationId: getRevenueReport
+      tags: [admin]
+      summary: Revenue report broken down by service & day
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RevenueReport"
+
+  /admin/settings:
+    get:
+      operationId: getAdminSettings
+      tags: [admin]
+      summary: Read platform settings (split ratio, conversion rate, services)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminSettings"
+    put:
+      operationId: updateAdminSettings
+      tags: [admin]
+      summary: Update platform settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminSettings"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminSettings"
+
 components:
   schemas:
     HealthStatus:
       type: object
       properties:
-        status:
-          type: string
-      required:
-        - status
+        status: { type: string }
+      required: [status]
 
+    Member:
+      type: object
+      properties:
+        id: { type: string }
+        membershipId: { type: string, description: "e.g. AGP-LA-IKE-000245" }
+        fullName: { type: string }
+        email: { type: string }
+        phone: { type: string }
+        state: { type: string }
+        lga: { type: string }
+        tier: { type: string, enum: [member, premier, partner] }
+        joinedAt: { type: string, format: date-time }
+        avatarUrl: { type: string, nullable: true }
+      required: [id, membershipId, fullName, email, phone, state, lga, tier, joinedAt]
+
+    WalletSummary:
+      type: object
+      properties:
+        cashBalance: { type: number }
+        smartUnits: { type: number }
+        pendingUnits: { type: number }
+        currency: { type: string, default: "NGN" }
+      required: [cashBalance, smartUnits, pendingUnits, currency]
+
+    SmartUnitsSummary:
+      type: object
+      properties:
+        totalUnits: { type: number }
+        earnedThisMonth: { type: number }
+        usedUnits: { type: number }
+        pendingUnits: { type: number }
+        unitValueNgn: { type: number, description: "1 unit = X NGN" }
+        monthlyTrend:
+          type: array
+          items:
+            type: object
+            properties:
+              month: { type: string }
+              earned: { type: number }
+              used: { type: number }
+            required: [month, earned, used]
+      required: [totalUnits, earnedThisMonth, usedUnits, pendingUnits, unitValueNgn, monthlyTrend]
+
+    SmartUnitsLedgerEntry:
+      type: object
+      properties:
+        id: { type: string }
+        sourceType: { type: string, enum: [utility, transfer_in, transfer_out, mart_redeem, bonus, adjustment] }
+        referenceId: { type: string, nullable: true }
+        unitsAdded: { type: number }
+        unitsUsed: { type: number }
+        balanceAfter: { type: number }
+        description: { type: string }
+        createdAt: { type: string, format: date-time }
+      required: [id, sourceType, unitsAdded, unitsUsed, balanceAfter, description, createdAt]
+
+    TransferUnitsBody:
+      type: object
+      properties:
+        toMembershipId: { type: string }
+        units: { type: number }
+        walletPin: { type: string }
+        note: { type: string, nullable: true }
+      required: [toMembershipId, units, walletPin]
+
+    TransferResult:
+      type: object
+      properties:
+        success: { type: boolean }
+        newBalance: { type: number }
+        reference: { type: string }
+      required: [success, newBalance, reference]
+
+    UtilityService:
+      type: object
+      properties:
+        id: { type: string }
+        category: { type: string, enum: [airtime, data, cable, electricity, internet] }
+        name: { type: string }
+        providers:
+          type: array
+          items:
+            type: object
+            properties:
+              code: { type: string }
+              name: { type: string }
+              logoColor: { type: string, nullable: true }
+            required: [code, name]
+        marginRate: { type: number, description: "0.0 - 1.0 portion of payment that becomes margin" }
+      required: [id, category, name, providers, marginRate]
+
+    UtilityTransaction:
+      type: object
+      properties:
+        id: { type: string }
+        memberId: { type: string }
+        memberName: { type: string, nullable: true }
+        membershipId: { type: string, nullable: true }
+        serviceCategory: { type: string }
+        provider: { type: string }
+        beneficiary: { type: string, description: "phone, smartcard, meter, etc." }
+        amount: { type: number }
+        marginGenerated: { type: number }
+        unitsEarned: { type: number }
+        status: { type: string, enum: [pending, success, failed] }
+        reference: { type: string }
+        createdAt: { type: string, format: date-time }
+      required: [id, memberId, serviceCategory, provider, beneficiary, amount, marginGenerated, unitsEarned, status, reference, createdAt]
+
+    CreateUtilityTxnRequest:
+      type: object
+      properties:
+        serviceCategory: { type: string }
+        provider: { type: string }
+        beneficiary: { type: string }
+        amount: { type: number }
+      required: [serviceCategory, provider, beneficiary, amount]
+
+    UtilityTransactionResult:
+      type: object
+      properties:
+        transaction: { $ref: "#/components/schemas/UtilityTransaction" }
+        unitsEarned: { type: number }
+        newUnitBalance: { type: number }
+      required: [transaction, unitsEarned, newUnitBalance]
+
+    MartProduct:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        description: { type: string }
+        category: { type: string }
+        priceNgn: { type: number }
+        priceUnits: { type: number }
+        imageUrl: { type: string, nullable: true }
+        stock: { type: integer }
+        rating: { type: number, nullable: true }
+        seller: { type: string }
+      required: [id, name, description, category, priceNgn, priceUnits, stock, seller]
+
+    MartOrder:
+      type: object
+      properties:
+        id: { type: string }
+        productId: { type: string }
+        productName: { type: string }
+        productImage: { type: string, nullable: true }
+        quantity: { type: integer }
+        paymentMethod: { type: string, enum: [cash, units, split] }
+        cashPaid: { type: number }
+        unitsUsed: { type: number }
+        totalNgn: { type: number }
+        status: { type: string, enum: [pending, processing, shipped, delivered, cancelled] }
+        createdAt: { type: string, format: date-time }
+      required: [id, productId, productName, quantity, paymentMethod, cashPaid, unitsUsed, totalNgn, status, createdAt]
+
+    CreateMartOrderRequest:
+      type: object
+      properties:
+        productId: { type: string }
+        quantity: { type: integer }
+        paymentMethod: { type: string, enum: [cash, units, split] }
+        cashPaid: { type: number, nullable: true }
+        unitsUsed: { type: number, nullable: true }
+      required: [productId, quantity, paymentMethod]
+
+    AgroProject:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        location: { type: string }
+        category: { type: string }
+        status: { type: string, enum: [planning, active, milestone, completed] }
+        progress: { type: number, description: "0-100" }
+        coverImage: { type: string, nullable: true }
+        summary: { type: string }
+        startedAt: { type: string, format: date-time }
+      required: [id, name, location, category, status, progress, summary, startedAt]
+
+    AgroProjectDetail:
+      allOf:
+        - $ref: "#/components/schemas/AgroProject"
+        - type: object
+          properties:
+            milestones:
+              type: array
+              items:
+                type: object
+                properties:
+                  title: { type: string }
+                  description: { type: string }
+                  status: { type: string, enum: [pending, in_progress, completed] }
+                  date: { type: string, format: date-time, nullable: true }
+                required: [title, description, status]
+            updates:
+              type: array
+              items:
+                type: object
+                properties:
+                  id: { type: string }
+                  title: { type: string }
+                  body: { type: string }
+                  imageUrl: { type: string, nullable: true }
+                  postedAt: { type: string, format: date-time }
+                required: [id, title, body, postedAt]
+            impact:
+              type: object
+              properties:
+                jobsCreated: { type: integer }
+                farmersSupported: { type: integer }
+                tonsProcessed: { type: number }
+              required: [jobsCreated, farmersSupported, tonsProcessed]
+          required: [milestones, updates, impact]
+
+    ImpactMetrics:
+      type: object
+      properties:
+        activeProjects: { type: integer }
+        statesCovered: { type: integer }
+        jobsCreated: { type: integer }
+        farmersSupported: { type: integer }
+        tonsProcessed: { type: number }
+        statesBreakdown:
+          type: array
+          items:
+            type: object
+            properties:
+              state: { type: string }
+              projects: { type: integer }
+            required: [state, projects]
+      required: [activeProjects, statesCovered, jobsCreated, farmersSupported, tonsProcessed, statesBreakdown]
+
+    DashboardSummary:
+      type: object
+      properties:
+        member: { $ref: "#/components/schemas/Member" }
+        wallet: { $ref: "#/components/schemas/WalletSummary" }
+        utilityPurchasesThisMonth: { type: integer }
+        unitsEarnedThisMonth: { type: number }
+        martOrdersCount: { type: integer }
+        unreadNotifications: { type: integer }
+        spendByCategory:
+          type: array
+          items:
+            type: object
+            properties:
+              category: { type: string }
+              amount: { type: number }
+            required: [category, amount]
+        weeklyUnits:
+          type: array
+          items:
+            type: object
+            properties:
+              day: { type: string }
+              units: { type: number }
+            required: [day, units]
+      required: [member, wallet, utilityPurchasesThisMonth, unitsEarnedThisMonth, martOrdersCount, unreadNotifications, spendByCategory, weeklyUnits]
+
+    ActivityItem:
+      type: object
+      properties:
+        id: { type: string }
+        kind: { type: string, enum: [utility, mart, transfer, project, bonus, system] }
+        title: { type: string }
+        description: { type: string }
+        amount: { type: number, nullable: true }
+        units: { type: number, nullable: true }
+        createdAt: { type: string, format: date-time }
+      required: [id, kind, title, description, createdAt]
+
+    Notification:
+      type: object
+      properties:
+        id: { type: string }
+        title: { type: string }
+        body: { type: string }
+        kind: { type: string, enum: [info, success, alert, project] }
+        read: { type: boolean }
+        createdAt: { type: string, format: date-time }
+      required: [id, title, body, kind, read, createdAt]
+
+    AdminOverview:
+      type: object
+      properties:
+        totalMembers: { type: integer }
+        activeMembers: { type: integer }
+        totalUnitsCirculating: { type: number }
+        totalRevenueNgn: { type: number }
+        totalUtilityVolumeNgn: { type: number }
+        totalMartOrders: { type: integer }
+        memberGrowth:
+          type: array
+          items:
+            type: object
+            properties:
+              month: { type: string }
+              members: { type: integer }
+            required: [month, members]
+        revenueByService:
+          type: array
+          items:
+            type: object
+            properties:
+              service: { type: string }
+              revenue: { type: number }
+            required: [service, revenue]
+        fraudAlerts: { type: integer }
+      required: [totalMembers, activeMembers, totalUnitsCirculating, totalRevenueNgn, totalUtilityVolumeNgn, totalMartOrders, memberGrowth, revenueByService, fraudAlerts]
+
+    AdminMember:
+      type: object
+      properties:
+        id: { type: string }
+        membershipId: { type: string }
+        fullName: { type: string }
+        email: { type: string }
+        state: { type: string }
+        tier: { type: string }
+        smartUnits: { type: number }
+        cashBalance: { type: number }
+        status: { type: string, enum: [active, suspended, pending] }
+        joinedAt: { type: string, format: date-time }
+      required: [id, membershipId, fullName, email, state, tier, smartUnits, cashBalance, status, joinedAt]
+
+    RevenueReport:
+      type: object
+      properties:
+        totalNgn: { type: number }
+        daily:
+          type: array
+          items:
+            type: object
+            properties:
+              date: { type: string }
+              revenue: { type: number }
+              volume: { type: number }
+            required: [date, revenue, volume]
+        byCategory:
+          type: array
+          items:
+            type: object
+            properties:
+              category: { type: string }
+              revenue: { type: number }
+            required: [category, revenue]
+      required: [totalNgn, daily, byCategory]
+
+    AdminSettings:
+      type: object
+      properties:
+        unitConversionRateNgn: { type: number, description: "1 unit = X NGN" }
+        rewardSplitMemberPct: { type: number, description: "0-100, default 60" }
+        servicesEnabled:
+          type: object
+          properties:
+            airtime: { type: boolean }
+            data: { type: boolean }
+            cable: { type: boolean }
+            electricity: { type: boolean }
+            internet: { type: boolean }
+          required: [airtime, data, cable, electricity, internet]
+      required: [unitConversionRateNgn, rewardSplitMemberPct, servicesEnabled]

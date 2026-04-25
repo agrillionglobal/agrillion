@@ -1,5 +1,10 @@
 import app from "./app";
 import { logger } from "./lib/logger";
+import { ensureDemoSeed } from "./lib/agrillion";
+
+await ensureDemoSeed().catch((err) => {
+  logger.error({ err }, "Failed to seed Agrillion demo data");
+});
 
 const rawPort = process.env["PORT"];
 

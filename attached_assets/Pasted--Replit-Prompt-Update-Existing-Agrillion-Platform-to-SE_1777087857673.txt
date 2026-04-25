@@ -1,0 +1,378 @@
+# Replit Prompt — Update Existing Agrillion Platform to SEC-Safe Rewards Model
+
+Update the existing Agrillion project and replace all investment/share-related features with a **Rewards + Utility Value System** that avoids securities/investment language.
+
+This is an upgrade/refactor task, not a brand-new build.
+
+---
+
+# Primary Objective
+
+Transform the current structure into a safer ecosystem using:
+
+* Utility payments
+* Transaction discounts
+* Reward balances
+* Smart Units
+* Marketplace redemption
+* Agro project transparency portal
+
+Do NOT use investment, securities, shares, dividends, ROI, profit language anywhere in UI or backend labels.
+
+---
+
+# Rename Products / Modules
+
+## Replace:
+
+* Agrillion Smart Share
+
+## With:
+
+* **Agrillion Smart**
+
+This becomes the utility + rewards engine.
+
+---
+
+# Replace Terminology Globally
+
+Search entire codebase and replace:
+
+* shares → smart units (or units where context fits)
+* investment → participation
+* dividend → reward bonus
+* ROI → progress value
+* investor → member
+* shareholder → unit holder
+* buy shares → earn units / acquire units
+* transfer shares → transfer units
+
+Keep wording natural and user-friendly.
+
+---
+
+# Route Updates
+
+Change routes:
+
+* /shares → /smart
+
+Keep redirect from old route to new route.
+
+New portals:
+
+* /
+* /mart
+* /smart
+* /tech
+* /dashboard
+* /admin
+
+---
+
+# SMART PORTAL (/smart)
+
+Build or update this portal as the main launch product.
+
+## Sections:
+
+### 1. Utility Payments
+
+Cards/buttons for:
+
+* Airtime
+* Data
+* Cable TV
+* Electricity (placeholder)
+* Internet (optional placeholder)
+
+Use mock APIs if real integrations are unavailable.
+
+---
+
+### 2. Smart Units Wallet
+
+Display:
+
+* Total Units
+* Earned This Month
+* Used Units
+* Pending Units
+* Recent Activity
+
+---
+
+### 3. Reward Engine Logic
+
+For every successful utility transaction:
+
+1. Calculate margin/discount
+2. Split:
+
+* 60% to user as Smart Units
+* 40% to Agrillion revenue ledger
+
+Example:
+
+If margin = ₦100
+
+* User receives 60 Units
+* Company ledger receives ₦40 equivalent revenue
+
+Store all records.
+
+---
+
+### 4. Unit History Table
+
+Columns:
+
+* Date
+* Service Type
+* Amount Paid
+* Margin Generated
+* Units Earned
+* Status
+
+---
+
+### 5. Unit Transfer
+
+Allow user to transfer Smart Units to another valid Membership ID.
+
+Require:
+
+* Wallet PIN
+* Confirmation modal
+
+---
+
+# MART PORTAL (/mart)
+
+Update marketplace to accept Smart Units.
+
+## Checkout options:
+
+* Cash Wallet only
+* Smart Units only (if enough)
+* Split payment (cash + units)
+
+Display conversion rate in admin settings.
+
+---
+
+# TECH PORTAL (/tech)
+
+Convert into transparency/project showcase portal.
+
+NO fundraising buttons.
+
+## Features:
+
+* Agro projects list
+* Progress status
+* Photos/placeholders
+* Milestones
+* Impact metrics
+* Updates/news
+
+Example projects:
+
+* Rice Mill Project
+* Cassava Plant
+* Cold Storage Hub
+* Poultry Feed Factory
+
+---
+
+# Dashboard Updates
+
+User dashboard should show:
+
+* Membership ID
+* Cash Wallet
+* Smart Units Wallet
+* Utility Purchases This Month
+* Mart Orders
+* Recent Activity
+* Notifications
+
+---
+
+# Membership ID (Keep Existing)
+
+Examples:
+
+* AGP-LA-IKE-000245
+* AGC-FCT-GWA-000011
+
+Use same identity across all modules.
+
+---
+
+# Database Refactor
+
+Update schema/tables.
+
+## Add / Rename Tables:
+
+users
+wallets
+smart_units_ledger
+utility_transactions
+mart_orders
+projects
+notifications
+audit_logs
+
+## smart_units_ledger fields:
+
+* id
+* user_id
+* source_type
+* reference_id
+* units_added
+* units_used
+* balance_after
+* created_at
+
+---
+
+# Admin Panel (/admin)
+
+Update admin features:
+
+## Manage:
+
+* Users
+* Utility transactions
+* Unit balances
+* Conversion rates
+* Marketplace orders
+* Projects
+* Fraud alerts
+* Revenue reports
+
+## Settings:
+
+* Unit conversion rate
+* Reward split ratio (default 60/40)
+* Enable/disable services
+
+---
+
+# Security Updates
+
+Implement:
+
+* JWT auth
+* Password hashing
+* Wallet PIN
+* OTP-ready structure
+* Role permissions
+* Rate limiting
+* Audit logs
+* Secure forms
+* Input validation
+
+---
+
+# UI Copy Rules (Important)
+
+Never display:
+
+* shares
+* investment
+* dividends
+* guaranteed returns
+* profit earning
+
+Always use:
+
+* Smart Units
+* Rewards
+* Benefits
+* Usage Value
+* Participation
+* Ecosystem Rewards
+
+---
+
+# Example UI Messages
+
+Instead of:
+
+"You earned shares"
+
+Use:
+
+"You earned 60 Smart Units from this purchase"
+
+Instead of:
+
+"Invest in project"
+
+Use:
+
+"View project progress"
+
+---
+
+# Nigerian Localization
+
+Use:
+
+* ₦ currency
+* +234 phone formatting
+* State dropdown
+* LGA support
+* Mobile-first responsive design
+
+---
+
+# Design Style
+
+Modern Nigerian fintech + commerce look:
+
+* clean cards
+* dashboards
+* charts
+* green accents
+* premium but simple
+* responsive
+
+---
+
+# Seed Demo Data
+
+Create:
+
+* 2 users
+* 20 utility transactions
+* 10 products
+* 5 projects
+* unit balances
+* admin account
+
+---
+
+# Migration Requirement
+
+If existing share data exists:
+
+Convert legacy share balances into Smart Units balances.
+
+---
+
+# Final Goal
+
+Refactor Agrillion into a regulation-safer super app powered by:
+
+* Membership ID
+* Utility transactions
+* Rewards engine
+* Agro marketplace
+* Project visibility
+
+Everything should run smoothly in Replit and feel like a real startup MVP.
