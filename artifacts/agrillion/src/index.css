@@ -66,60 +66,60 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* LIGHT MODE — ivory + deep forest green + brushed gold */
+/* LIGHT MODE — soft ivory-on-forest version of the logo aesthetic */
 :root {
-  --button-outline: rgba(20, 50, 35, .12);
-  --badge-outline: rgba(20, 50, 35, .08);
-  --opaque-button-border-intensity: -8;
-  --elevate-1: rgba(20, 50, 35, .035);
-  --elevate-2: rgba(20, 50, 35, .085);
+  --button-outline: rgba(255, 245, 220, .14);
+  --badge-outline: rgba(255, 245, 220, .10);
+  --opaque-button-border-intensity: 8;
+  --elevate-1: rgba(255, 245, 220, .045);
+  --elevate-2: rgba(255, 245, 220, .095);
 
-  --background: 42 38% 97%;
-  --foreground: 150 35% 12%;
+  --background: 150 38% 9%;
+  --foreground: 42 35% 94%;
 
-  --border: 150 18% 88%;
-  --input: 150 18% 90%;
-  --ring: 150 45% 22%;
+  --border: 150 28% 18%;
+  --input: 150 28% 16%;
+  --ring: 42 75% 55%;
 
-  --card: 0 0% 100%;
-  --card-foreground: 150 35% 12%;
-  --card-border: 150 18% 90%;
+  --card: 150 35% 12%;
+  --card-foreground: 42 35% 94%;
+  --card-border: 150 25% 20%;
 
-  --sidebar: 150 35% 11%;
-  --sidebar-foreground: 42 35% 92%;
-  --sidebar-border: 150 30% 18%;
-  --sidebar-primary: 42 65% 55%;
-  --sidebar-primary-foreground: 150 35% 11%;
-  --sidebar-accent: 150 30% 18%;
-  --sidebar-accent-foreground: 42 35% 92%;
-  --sidebar-ring: 42 65% 55%;
+  --sidebar: 150 40% 7%;
+  --sidebar-foreground: 42 32% 92%;
+  --sidebar-border: 150 28% 16%;
+  --sidebar-primary: 42 75% 55%;
+  --sidebar-primary-foreground: 150 40% 8%;
+  --sidebar-accent: 150 30% 16%;
+  --sidebar-accent-foreground: 42 32% 92%;
+  --sidebar-ring: 42 75% 55%;
 
-  --popover: 0 0% 100%;
-  --popover-foreground: 150 35% 12%;
-  --popover-border: 150 18% 90%;
+  --popover: 150 35% 12%;
+  --popover-foreground: 42 35% 94%;
+  --popover-border: 150 25% 20%;
 
-  --primary: 150 45% 18%;
-  --primary-foreground: 42 35% 96%;
+  --primary: 42 75% 55%;
+  --primary-foreground: 150 40% 8%;
 
-  --secondary: 42 65% 55%;
-  --secondary-foreground: 150 35% 12%;
+  --secondary: 150 30% 16%;
+  --secondary-foreground: 42 35% 94%;
 
-  --muted: 42 25% 93%;
-  --muted-foreground: 150 12% 38%;
+  --muted: 150 25% 14%;
+  --muted-foreground: 42 18% 70%;
 
-  --accent: 42 70% 60%;
-  --accent-foreground: 150 35% 12%;
+  --accent: 42 75% 60%;
+  --accent-foreground: 150 40% 8%;
 
-  --destructive: 0 72% 45%;
+  --destructive: 0 65% 50%;
   --destructive-foreground: 0 0% 100%;
 
-  --chart-1: 150 45% 22%;
-  --chart-2: 42 75% 55%;
-  --chart-3: 165 35% 38%;
+  --chart-1: 42 75% 58%;
+  --chart-2: 150 40% 45%;
+  --chart-3: 165 35% 50%;
   --chart-4: 28 70% 55%;
-  --chart-5: 195 40% 42%;
+  --chart-5: 195 40% 50%;
 
-  --app-font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --app-font-sans: 'Fraunces', Georgia, ui-serif, serif;
   --app-font-serif: 'Fraunces', Georgia, serif;
   --app-font-mono: ui-monospace, Menlo, monospace;
   --radius: .75rem;
@@ -215,11 +215,30 @@
 
 @layer base {
   * { @apply border-border; }
-  body {
-    @apply font-sans antialiased bg-background text-foreground;
-    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'ss01';
+  html, body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
   }
-  h1, h2, h3, h4, h5, h6 { letter-spacing: -0.02em; }
+  body {
+    font-family: var(--app-font-serif);
+    @apply antialiased;
+    font-feature-settings: 'ss01', 'ss02', 'ss03', 'ss04', 'ss05';
+    background-image:
+      radial-gradient(ellipse 80% 60% at 20% 0%, hsl(150 60% 18% / .55), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 100% 100%, hsl(150 70% 12% / .65), transparent 65%),
+      linear-gradient(180deg, hsl(150 40% 8%), hsl(150 45% 6%));
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--app-font-serif);
+    letter-spacing: -0.018em;
+    font-weight: 600;
+  }
+  /* Use Inter only where dense data needs density */
+  .font-data, table, code, kbd, samp, pre {
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  }
 }
 
 @layer utilities {

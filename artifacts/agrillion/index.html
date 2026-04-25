@@ -7,18 +7,18 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800;9..144,900&display=swap" rel="stylesheet">
     <meta name="description" content="Agrillion — Pay your bills, earn Smart Units, grow Nigeria. A regulation-safe rewards-and-utility platform with a Nigerian agro-marketplace.">
+    <style>
+      html, body { background-color: hsl(150 45% 6%); color: hsl(42 35% 94%); }
+    </style>
   </head>
   <body>
     <script>
       (function () {
         try {
-          var stored = localStorage.getItem('agrillion-theme');
-          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-          var dark = stored ? stored === 'dark' : prefersDark;
-          if (dark) document.documentElement.classList.add('dark');
-          document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+          document.documentElement.classList.add('dark');
+          document.documentElement.style.colorScheme = 'dark';
         } catch (e) {}
       })();
     </script>

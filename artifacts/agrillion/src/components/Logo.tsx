@@ -28,13 +28,13 @@ export function Logo({
       {variant === "horizontal" && (
         <div className="flex flex-col leading-none">
           <span
-            className="font-serif font-semibold tracking-tight text-foreground"
-            style={{ fontSize: size === "xl" ? 28 : size === "lg" ? 22 : 18 }}
+            className="gold-text font-serif font-semibold tracking-wide"
+            style={{ fontSize: size === "xl" ? 30 : size === "lg" ? 24 : 19, letterSpacing: "0.02em" }}
           >
             Agrillion
           </span>
           {size !== "sm" && (
-            <span className="mt-1 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            <span className="mt-1 text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
               Pay · Earn · Grow
             </span>
           )}
