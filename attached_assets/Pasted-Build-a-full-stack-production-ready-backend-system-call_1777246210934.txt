@@ -1,0 +1,219 @@
+Build a full-stack production-ready backend system called **Agrillion Core API** that powers multiple applications (Agrillion Mart, Agrillion Smart, Agrillion Tech) using a **single database and single authentication system (SSO)**.
+
+## 🧠 Core Requirements
+
+* One backend API
+* One PostgreSQL database
+* One login system (JWT-based authentication)
+* Unique Membership ID (AGID) for every user
+* Multi-app support (Mart, Smart, Tech all use same API)
+
+---
+
+## ⚙️ Tech Stack
+
+* Backend: Node.js with Express (or NestJS if preferred)
+* Database: PostgreSQL (use Prisma ORM)
+* Auth: JWT (access + refresh tokens)
+* Password hashing: bcrypt
+* Environment config: dotenv
+
+---
+
+## 🗄️ Database Schema (Prisma)
+
+Create the following models:
+
+### User
+
+* id (UUID)
+* agid (unique, auto-generated like AGR-000001)
+* fullName
+* email (unique)
+* phone
+* passwordHash
+* createdAt
+
+### Session
+
+* id
+* userId
+* refreshToken
+* expiresAt
+
+### Wallet
+
+* id
+* userId
+* type (POINTS, SHARES, CASH)
+* balance (default 0)
+
+### Transaction
+
+* id
+* userId
+* walletType
+* amount
+* type (EARN, SPEND, CONVERT)
+* reference
+* createdAt
+
+### Product (Mart)
+
+* id
+* name
+* price
+* stock
+* category
+
+### Order (Mart)
+
+* id
+* userId
+* totalAmount
+* status
+* createdAt
+
+### FarmReport (Tech)
+
+* id
+* userId
+* productId
+* quantity
+* location
+* status
+* createdAt
+
+---
+
+## 🔑 Authentication System
+
+Implement:
+
+* POST /auth/register
+
+  * Create user
+  * Auto-generate AGID
+  * Hash password
+  * Create default wallets (POINTS, SHARES)
+
+* POST /auth/login
+
+  * Validate credentials
+  * Return access token + refresh token
+
+* GET /auth/me
+
+  * Return current logged-in user using JWT
+
+* POST /auth/refresh
+
+  * Generate new access token
+
+---
+
+## 💰 Wallet System
+
+Endpoints:
+
+* GET /wallets → return all user wallets
+* POST /wallets/convert
+
+  * Convert POINTS → SHARES
+
+Implement logic:
+
+* 100 points = 1 share (configurable)
+
+---
+
+## 🛒 Mart (E-commerce)
+
+Endpoints:
+
+* GET /products
+* POST /orders
+
+Logic:
+
+* When user places order:
+
+  * Deduct stock
+  * Add transaction
+  * Reward user with 1–3% points
+
+---
+
+## 🌱 Smart (Rewards)
+
+Endpoints:
+
+* GET /points
+* GET /shares
+
+---
+
+## 📊 Tech (Tracking)
+
+Endpoints:
+
+* POST /farm-reports
+* GET /farm-reports
+
+---
+
+## 🔐 Middleware
+
+* JWT authentication middleware
+* Protect all routes except /auth
+
+---
+
+## 🧩 Architecture
+
+Structure project like:
+
+/src
+/modules
+/auth
+/users
+/wallets
+/products
+/orders
+/reports
+/middleware
+/utils
+app.js
+
+---
+
+## 🌐 CORS + SSO
+
+* Enable CORS for:
+
+  * mart.agrillion.com
+  * smart.agrillion.com
+  * tech.agrillion.com
+
+* Ensure login works across all apps using JWT
+
+---
+
+## 🚀 Extras
+
+* Seed script for sample products
+* Basic error handling
+* Clean modular code
+* README with setup instructions
+
+---
+
+## 🎯 Goal
+
+This API must serve as a **central engine** where:
+
+* One user → one AGID
+* One login → access all apps
+* One wallet system → powers rewards, purchases, and shares
+
+Make the code clean, scalable, and production-ready.
