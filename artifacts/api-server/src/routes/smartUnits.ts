@@ -22,8 +22,8 @@ import {
 
 const router: IRouter = Router();
 
-router.get("/smart-units/summary", async (_req, res) => {
-  const m = await getCurrentMember();
+router.get("/smart-units/summary", async (req, res) => {
+  const m = await getCurrentMember(req.auth?.memberId);
   const w = await getOrCreateWallet(m.id);
 
   const monthStart = new Date();
@@ -91,7 +91,7 @@ router.get("/smart-units/ledger", async (req, res) => {
   const params = ListSmartUnitsLedgerQueryParams.parse({
     limit: req.query.limit ? Number(req.query.limit) : undefined,
   });
-  const m = await getCurrentMember();
+  const m = await getCurrentMember(req.auth?.memberId);
   const limit = params.limit ?? 50;
   const rows = await db
     .select()
@@ -118,7 +118,7 @@ router.get("/smart-units/ledger", async (req, res) => {
 
 router.post("/smart-units/transfer", async (req, res) => {
   const body = TransferSmartUnitsBody.parse(req.body);
-  const m = await getCurrentMember();
+  const m = await getCurrentMember(req.auth?.memberId);
   const w = await getOrCreateWallet(m.id);
 
   if (body.units <= 0) {

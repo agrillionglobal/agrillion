@@ -3,6 +3,7 @@ import cors from "cors";
 import pinoHttp from "pino-http";
 import router from "./routes";
 import { logger } from "./lib/logger";
+import { attachAuth } from "./middlewares/auth";
 
 const app: Express = express();
 
@@ -25,9 +26,17 @@ app.use(
     },
   }),
 );
-app.use(cors());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  }),
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Optional JWT — populates req.auth when a valid Bearer token is present.
+app.use("/api", attachAuth);
 
 app.use("/api", router);
 

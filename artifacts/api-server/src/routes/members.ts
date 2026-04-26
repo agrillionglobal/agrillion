@@ -4,8 +4,8 @@ import { getCurrentMember } from "../lib/agrillion";
 
 const router: IRouter = Router();
 
-router.get("/members/me", async (_req, res) => {
-  const m = await getCurrentMember();
+router.get("/members/me", async (req, res) => {
+  const m = await getCurrentMember(req.auth?.memberId);
   const data = GetMyMemberResponse.parse({
     id: m.id,
     membershipId: m.membershipId,

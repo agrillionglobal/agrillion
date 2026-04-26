@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: auth
+    description: Registration, login, JWT refresh, and current session
   - name: members
     description: Member account & profile
   - name: wallet
@@ -39,6 +41,101 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /auth/register:
+    post:
+      operationId: authRegister
+      tags: [auth]
+      summary: Create a new member account and return JWT tokens
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "409":
+          description: Email already registered
+
+  /auth/login:
+    post:
+      operationId: authLogin
+      tags: [auth]
+      summary: Sign in with Membership ID / phone / email + password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid credentials
+
+  /auth/refresh:
+    post:
+      operationId: authRefresh
+      tags: [auth]
+      summary: Exchange a refresh token for a new access token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid or expired refresh token
+
+  /auth/logout:
+    post:
+      operationId: authLogout
+      tags: [auth]
+      summary: Revoke the current refresh token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshRequest"
+      responses:
+        "204":
+          description: Logged out
+
+  /auth/me:
+    get:
+      operationId: authMe
+      tags: [auth]
+      summary: Current member resolved from the access token
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Member"
+        "401":
+          description: Not authenticated
 
   /members/me:
     get:
@@ -395,12 +492,51 @@ paths:
                 $ref: "#/components/schemas/AdminSettings"
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     HealthStatus:
       type: object
       properties:
         status: { type: string }
       required: [status]
+
+    RegisterRequest:
+      type: object
+      properties:
+        fullName: { type: string }
+        email: { type: string, format: email }
+        phone: { type: string, description: "+234... or 0..." }
+        state: { type: string }
+        lga: { type: string }
+        password: { type: string, minLength: 8 }
+        tier: { type: string, enum: [member, premier], default: member }
+      required: [fullName, email, phone, state, lga, password]
+
+    LoginRequest:
+      type: object
+      properties:
+        identifier: { type: string, description: "Membership ID, email, or phone" }
+        password: { type: string }
+      required: [identifier, password]
+
+    RefreshRequest:
+      type: object
+      properties:
+        refreshToken: { type: string }
+      required: [refreshToken]
+
+    AuthResponse:
+      type: object
+      properties:
+        accessToken: { type: string, description: "Short-lived JWT (15m)" }
+        refreshToken: { type: string, description: "Long-lived rotating token (30d)" }
+        accessTokenExpiresAt: { type: string, format: date-time }
+        member: { $ref: "#/components/schemas/Member" }
+      required: [accessToken, refreshToken, accessTokenExpiresAt, member]
 
     Member:
       type: object

@@ -2,6 +2,7 @@ import { db } from "@workspace/db";
 import {
   members,
   wallets,
+  sessions,
   utilityTransactions,
   smartUnitsLedger,
   martProducts,
@@ -10,8 +11,22 @@ import {
   notifications,
   adminSettings,
 } from "@workspace/db";
-import { eq, desc, sql } from "drizzle-orm";
+import { eq, desc, sql, isNull } from "drizzle-orm";
 import { logger } from "./logger";
+import { hashPassword } from "./password";
+
+async function ensureDemoPasswords(): Promise<void> {
+  const missing = await db
+    .select({ id: members.id })
+    .from(members)
+    .where(isNull(members.passwordHash));
+  if (missing.length === 0) return;
+  const hash = await hashPassword("demo1234");
+  for (const m of missing) {
+    await db.update(members).set({ passwordHash: hash }).where(eq(members.id, m.id));
+  }
+  logger.info({ count: missing.length }, "Backfilled demo password hashes");
+}
 
 const STATES = [
   { state: "Lagos", code: "LA", lgas: ["Ikeja", "Lekki", "Yaba", "Surulere"] },
@@ -106,11 +121,17 @@ export const UTILITY_SERVICES = [
 
 export async function ensureDemoSeed() {
   const existing = await db.select({ id: members.id }).from(members).limit(1);
-  if (existing.length > 0) return;
+  if (existing.length > 0) {
+    await ensureDemoPasswords();
+    return;
+  }
   logger.info("Seeding Agrillion demo data...");
 
   // Settings
   await db.insert(adminSettings).values({ id: 1 }).onConflictDoNothing();
+
+  // Demo password (same for all seeded members): "demo1234"
+  const demoHash = await hashPassword("demo1234");
 
   // Members
   const memberRows = await db
@@ -124,6 +145,7 @@ export async function ensureDemoSeed() {
         state: "Lagos",
         lga: "Ikeja",
         tier: "premier",
+        passwordHash: demoHash,
       },
       {
         membershipId: makeMembershipId("AGC", "FCT", "GWA", 11),
@@ -133,6 +155,7 @@ export async function ensureDemoSeed() {
         state: "FCT",
         lga: "Gwagwalada",
         tier: "member",
+        passwordHash: demoHash,
       },
       {
         membershipId: makeMembershipId("AGP", "RV", "PHC", 87),
@@ -142,6 +165,7 @@ export async function ensureDemoSeed() {
         state: "Rivers",
         lga: "Port Harcourt",
         tier: "partner",
+        passwordHash: demoHash,
       },
     ])
     .returning();
@@ -503,8 +527,17 @@ export async function ensureDemoSeed() {
   logger.info("Agrillion demo data seeded.");
 }
 
-export async function getCurrentMember() {
-  // For demo: pick the primary member (first inserted Adaeze)
+export async function getCurrentMember(memberId?: string | null) {
+  // Authenticated path: resolve by id when provided.
+  if (memberId) {
+    const rows = await db
+      .select()
+      .from(members)
+      .where(eq(members.id, memberId))
+      .limit(1);
+    if (rows[0]) return rows[0];
+  }
+  // Demo fallback: first seeded member (preserves existing pages while auth rolls out).
   const rows = await db
     .select()
     .from(members)
@@ -512,6 +545,66 @@ export async function getCurrentMember() {
     .limit(1);
   if (rows.length === 0) throw new Error("No members seeded");
   return rows[0]!;
+}
+
+const STATE_CODE_BY_NAME: Record<string, string> = {
+  Lagos: "LA",
+  FCT: "FCT",
+  Rivers: "RV",
+  Kano: "KN",
+  Oyo: "OY",
+};
+
+function codeFor(name: string, fallbackLen = 3): string {
+  const cleaned = name.replace(/[^A-Za-z]/g, "").toUpperCase();
+  return cleaned.slice(0, fallbackLen) || "XXX";
+}
+
+function stateCodeFor(state: string): string {
+  return STATE_CODE_BY_NAME[state] ?? codeFor(state, 2);
+}
+
+export async function allocateMembershipId(opts: {
+  state: string;
+  lga: string;
+  tier: string;
+}): Promise<string> {
+  const prefix: "AGP" | "AGC" = opts.tier === "premier" ? "AGP" : "AGC";
+  const stateCode = stateCodeFor(opts.state);
+  const lgaCode = codeFor(opts.lga, 3);
+  // Count existing members in same state/lga to allocate next number; gap-tolerant via random fallback.
+  const existing = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(members)
+    .where(eq(members.lga, opts.lga));
+  const n = (existing[0]?.count ?? 0) + 1 + Math.floor(Math.random() * 7);
+  return makeMembershipId(prefix, stateCode, lgaCode, n);
+}
+
+export function memberToDto(m: typeof members.$inferSelect): {
+  id: string;
+  membershipId: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  state: string;
+  lga: string;
+  tier: string;
+  joinedAt: string;
+  avatarUrl: string | null;
+} {
+  return {
+    id: m.id,
+    membershipId: m.membershipId,
+    fullName: m.fullName,
+    email: m.email,
+    phone: m.phone,
+    state: m.state,
+    lga: m.lga,
+    tier: m.tier,
+    joinedAt: m.joinedAt.toISOString(),
+    avatarUrl: m.avatarUrl,
+  };
 }
 
 export async function getOrCreateWallet(memberId: string) {
@@ -528,4 +621,4 @@ export async function getOrCreateWallet(memberId: string) {
   return created!;
 }
 
-export { db, members, wallets, utilityTransactions, smartUnitsLedger, martProducts, martOrders, projects, notifications, adminSettings, eq, desc, sql };
+export { db, members, wallets, sessions, utilityTransactions, smartUnitsLedger, martProducts, martOrders, projects, notifications, adminSettings, eq, desc, sql };

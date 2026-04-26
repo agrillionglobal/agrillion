@@ -9,6 +9,36 @@ export interface HealthStatus {
   status: string;
 }
 
+export type RegisterRequestTier =
+  (typeof RegisterRequestTier)[keyof typeof RegisterRequestTier];
+
+export const RegisterRequestTier = {
+  member: "member",
+  premier: "premier",
+} as const;
+
+export interface RegisterRequest {
+  fullName: string;
+  email: string;
+  /** +234... or 0... */
+  phone: string;
+  state: string;
+  lga: string;
+  /** @minLength 8 */
+  password: string;
+  tier?: RegisterRequestTier;
+}
+
+export interface LoginRequest {
+  /** Membership ID, email, or phone */
+  identifier: string;
+  password: string;
+}
+
+export interface RefreshRequest {
+  refreshToken: string;
+}
+
 export type MemberTier = (typeof MemberTier)[keyof typeof MemberTier];
 
 export const MemberTier = {
@@ -29,6 +59,15 @@ export interface Member {
   tier: MemberTier;
   joinedAt: string;
   avatarUrl?: string | null;
+}
+
+export interface AuthResponse {
+  /** Short-lived JWT (15m) */
+  accessToken: string;
+  /** Long-lived rotating token (30d) */
+  refreshToken: string;
+  accessTokenExpiresAt: string;
+  member: Member;
 }
 
 export interface WalletSummary {

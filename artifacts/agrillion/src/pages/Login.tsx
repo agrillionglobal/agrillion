@@ -8,19 +8,50 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent } from "@/components/ui/card";
 import { Logo } from "@/components/Logo";
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import { ArrowRight, ShieldCheck, AlertCircle } from "lucide-react";
+import { useAuthLogin } from "@workspace/api-client-react";
+import { saveTokens } from "@/lib/auth";
+import { useQueryClient } from "@tanstack/react-query";
 
 const BASE = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
 
 export default function Login() {
   const [, setLocation] = useLocation();
-  const [busy, setBusy] = useState(false);
+  const [identifier, setIdentifier] = useState("AGP-LA-IKE-000245");
+  const [password, setPassword] = useState("demo1234");
+  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+  const login = useAuthLogin();
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setBusy(true);
-    setTimeout(() => setLocation("/dashboard"), 600);
+    setError(null);
+    login.mutate(
+      { data: { identifier: identifier.trim(), password } },
+      {
+        onSuccess: (data) => {
+          saveTokens({
+            accessToken: data.accessToken,
+            refreshToken: data.refreshToken,
+            accessTokenExpiresAt:
+              typeof data.accessTokenExpiresAt === "string"
+                ? data.accessTokenExpiresAt
+                : new Date(data.accessTokenExpiresAt).toISOString(),
+          });
+          queryClient.clear();
+          setLocation("/dashboard");
+        },
+        onError: (err) => {
+          const msg =
+            err && typeof err === "object" && "status" in err && (err as { status?: number }).status === 401
+              ? "Invalid Membership ID, email, or password."
+              : "Sign-in failed. Please try again.";
+          setError(msg);
+        },
+      },
+    );
   };
+  const busy = login.isPending;
 
   return (
     <div className="min-h-screen grid lg:grid-cols-2 bg-background">
@@ -40,12 +71,14 @@ export default function Login() {
           </p>
           <form onSubmit={onSubmit} className="mt-8 space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="ident">Membership ID or phone</Label>
+              <Label htmlFor="ident">Membership ID, email, or phone</Label>
               <Input
                 id="ident"
                 placeholder="AGP-LA-IKE-000245"
-                defaultValue="AGP-LA-IKE-000245"
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
                 className="h-11"
+                autoComplete="username"
                 required
               />
             </div>
@@ -56,8 +89,22 @@ export default function Login() {
                   Forgot password or ID?
                 </Link>
               </div>
-              <PasswordInput id="pwd" placeholder="••••••••" defaultValue="demo1234" className="h-11" required />
+              <PasswordInput
+                id="pwd"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="h-11"
+                autoComplete="current-password"
+                required
+              />
             </div>
+            {error && (
+              <div className="flex items-start gap-2 rounded-md border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">
+                <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Checkbox defaultChecked /> Remember me

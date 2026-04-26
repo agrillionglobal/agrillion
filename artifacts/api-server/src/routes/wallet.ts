@@ -4,8 +4,8 @@ import { getCurrentMember, getOrCreateWallet } from "../lib/agrillion";
 
 const router: IRouter = Router();
 
-router.get("/wallet", async (_req, res) => {
-  const m = await getCurrentMember();
+router.get("/wallet", async (req, res) => {
+  const m = await getCurrentMember(req.auth?.memberId);
   const w = await getOrCreateWallet(m.id);
   res.json(
     GetWalletResponse.parse({

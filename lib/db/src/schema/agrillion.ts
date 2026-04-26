@@ -118,6 +118,16 @@ export const notifications = pgTable("notifications", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+export const sessions = pgTable("sessions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  memberId: uuid("member_id").notNull().references(() => members.id, { onDelete: "cascade" }),
+  refreshTokenHash: text("refresh_token_hash").notNull().unique(),
+  userAgent: text("user_agent"),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  revokedAt: timestamp("revoked_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
 export const adminSettings = pgTable("admin_settings", {
   id: integer("id").primaryKey().default(1),
   unitConversionRateNgn: numeric("unit_conversion_rate_ngn", { precision: 10, scale: 4 }).notNull().default("1"),

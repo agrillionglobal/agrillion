@@ -30,7 +30,7 @@ router.get("/utilities/transactions", async (req, res) => {
   const params = ListUtilityTransactionsQueryParams.parse({
     limit: req.query.limit ? Number(req.query.limit) : undefined,
   });
-  const m = await getCurrentMember();
+  const m = await getCurrentMember(req.auth?.memberId);
   const limit = params.limit ?? 50;
   const rows = await db
     .select()
@@ -62,7 +62,7 @@ router.get("/utilities/transactions", async (req, res) => {
 
 router.post("/utilities/transactions", async (req, res) => {
   const body = CreateUtilityTransactionBody.parse(req.body);
-  const m = await getCurrentMember();
+  const m = await getCurrentMember(req.auth?.memberId);
   const w = await getOrCreateWallet(m.id);
 
   const settingsRow = await db.select().from(adminSettings).limit(1);

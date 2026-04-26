@@ -39,8 +39,8 @@ router.get("/mart/products", async (_req, res) => {
   );
 });
 
-router.get("/mart/orders", async (_req, res) => {
-  const m = await getCurrentMember();
+router.get("/mart/orders", async (req, res) => {
+  const m = await getCurrentMember(req.auth?.memberId);
   const rows = await db
     .select()
     .from(martOrders)
@@ -67,7 +67,7 @@ router.get("/mart/orders", async (_req, res) => {
 
 router.post("/mart/orders", async (req, res) => {
   const body = CreateMartOrderBody.parse(req.body);
-  const m = await getCurrentMember();
+  const m = await getCurrentMember(req.auth?.memberId);
   const w = await getOrCreateWallet(m.id);
 
   const product = await db

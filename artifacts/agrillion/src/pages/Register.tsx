@@ -13,14 +13,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, AlertCircle } from "lucide-react";
 import { NIGERIA_STATES_LGAS } from "@/lib/format";
+import { useAuthRegister } from "@workspace/api-client-react";
+import { saveTokens } from "@/lib/auth";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Register() {
   const [, setLocation] = useLocation();
   const [state, setState] = useState<string>("Lagos");
-  const [busy, setBusy] = useState(false);
+  const [lga, setLga] = useState<string>("Ikeja");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const lgas = useMemo(() => NIGERIA_STATES_LGAS[state] ?? [], [state]);
+  const queryClient = useQueryClient();
+  const register = useAuthRegister();
+  const busy = register.isPending;
 
   return (
     <div className="min-h-screen bg-background">
@@ -48,19 +59,78 @@ export default function Register() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              setBusy(true);
-              setTimeout(() => setLocation("/dashboard"), 600);
+              setError(null);
+              const phoneNormalized = phone.trim().startsWith("+")
+                ? phone.trim()
+                : `+234${phone.trim().replace(/^0/, "").replace(/\s+/g, "")}`;
+              register.mutate(
+                {
+                  data: {
+                    fullName: fullName.trim(),
+                    email: email.trim(),
+                    phone: phoneNormalized,
+                    state,
+                    lga,
+                    password,
+                    tier: "member",
+                  },
+                },
+                {
+                  onSuccess: (data) => {
+                    saveTokens({
+                      accessToken: data.accessToken,
+                      refreshToken: data.refreshToken,
+                      accessTokenExpiresAt:
+                        typeof data.accessTokenExpiresAt === "string"
+                          ? data.accessTokenExpiresAt
+                          : new Date(data.accessTokenExpiresAt).toISOString(),
+                    });
+                    queryClient.clear();
+                    setLocation("/dashboard");
+                  },
+                  onError: (err) => {
+                    const status =
+                      err && typeof err === "object" && "status" in err
+                        ? (err as { status?: number }).status
+                        : undefined;
+                    if (status === 409) {
+                      setError("That email or phone is already registered. Try signing in instead.");
+                    } else if (status === 400) {
+                      setError("Please double-check your details — some fields look invalid.");
+                    } else {
+                      setError("Could not create your account. Please try again.");
+                    }
+                  },
+                },
+              );
             }}
             className="mt-8 space-y-5 rounded-2xl border border-border bg-card p-6 md:p-8 shadow-sm"
           >
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <Label htmlFor="full">Full name</Label>
-                <Input id="full" placeholder="e.g. Adaeze Okoye" required className="h-11" />
+                <Input
+                  id="full"
+                  placeholder="e.g. Adaeze Okoye"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  required
+                  className="h-11"
+                  autoComplete="name"
+                />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="you@example.com" required className="h-11" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="h-11"
+                  autoComplete="email"
+                />
               </div>
             </div>
             <div className="grid md:grid-cols-2 gap-4">
@@ -68,12 +138,28 @@ export default function Register() {
                 <Label htmlFor="phone">Phone</Label>
                 <div className="flex h-11 rounded-md border border-input bg-background overflow-hidden focus-within:ring-2 focus-within:ring-ring">
                   <span className="grid place-items-center px-3 text-sm font-medium text-muted-foreground border-r border-border">+234</span>
-                  <Input id="phone" inputMode="tel" placeholder="803 123 4567" required className="h-full border-0 focus-visible:ring-0" />
+                  <Input
+                    id="phone"
+                    inputMode="tel"
+                    placeholder="803 123 4567"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    required
+                    className="h-full border-0 focus-visible:ring-0"
+                    autoComplete="tel"
+                  />
                 </div>
               </div>
               <div className="space-y-1.5">
                 <Label>State</Label>
-                <Select value={state} onValueChange={setState}>
+                <Select
+                  value={state}
+                  onValueChange={(v) => {
+                    setState(v);
+                    const next = NIGERIA_STATES_LGAS[v]?.[0];
+                    if (next) setLga(next);
+                  }}
+                >
                   <SelectTrigger className="h-11"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     {Object.keys(NIGERIA_STATES_LGAS).map((s) => (
@@ -86,7 +172,7 @@ export default function Register() {
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <Label>LGA</Label>
-                <Select defaultValue={lgas[0]}>
+                <Select value={lga} onValueChange={setLga}>
                   <SelectTrigger className="h-11"><SelectValue placeholder="Select LGA" /></SelectTrigger>
                   <SelectContent>
                     {lgas.map((l) => <SelectItem key={l} value={l}>{l}</SelectItem>)}
@@ -95,12 +181,27 @@ export default function Register() {
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="pwd">Password</Label>
-                <PasswordInput id="pwd" placeholder="At least 8 characters" required className="h-11" />
+                <PasswordInput
+                  id="pwd"
+                  placeholder="At least 8 characters"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  minLength={8}
+                  className="h-11"
+                  autoComplete="new-password"
+                />
                 <p className="text-[11px] text-muted-foreground">
                   Tap the eye icon to confirm what you typed.
                 </p>
               </div>
             </div>
+            {error && (
+              <div className="flex items-start gap-2 rounded-md border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">
+                <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <Label htmlFor="pin">4-digit wallet PIN</Label>

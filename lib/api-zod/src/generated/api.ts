@@ -15,6 +15,97 @@ export const HealthCheckResponse = zod.object({
 });
 
 /**
+ * @summary Create a new member account and return JWT tokens
+ */
+export const authRegisterBodyPasswordMin = 8;
+
+export const authRegisterBodyTierDefault = `member`;
+
+export const AuthRegisterBody = zod.object({
+  fullName: zod.string(),
+  email: zod.string().email(),
+  phone: zod.string().describe("+234... or 0..."),
+  state: zod.string(),
+  lga: zod.string(),
+  password: zod.string().min(authRegisterBodyPasswordMin),
+  tier: zod.enum(["member", "premier"]).default(authRegisterBodyTierDefault),
+});
+
+/**
+ * @summary Sign in with Membership ID / phone / email + password
+ */
+export const AuthLoginBody = zod.object({
+  identifier: zod.string().describe("Membership ID, email, or phone"),
+  password: zod.string(),
+});
+
+export const AuthLoginResponse = zod.object({
+  accessToken: zod.string().describe("Short-lived JWT (15m)"),
+  refreshToken: zod.string().describe("Long-lived rotating token (30d)"),
+  accessTokenExpiresAt: zod.coerce.date(),
+  member: zod.object({
+    id: zod.string(),
+    membershipId: zod.string().describe("e.g. AGP-LA-IKE-000245"),
+    fullName: zod.string(),
+    email: zod.string(),
+    phone: zod.string(),
+    state: zod.string(),
+    lga: zod.string(),
+    tier: zod.enum(["member", "premier", "partner"]),
+    joinedAt: zod.coerce.date(),
+    avatarUrl: zod.string().nullish(),
+  }),
+});
+
+/**
+ * @summary Exchange a refresh token for a new access token
+ */
+export const AuthRefreshBody = zod.object({
+  refreshToken: zod.string(),
+});
+
+export const AuthRefreshResponse = zod.object({
+  accessToken: zod.string().describe("Short-lived JWT (15m)"),
+  refreshToken: zod.string().describe("Long-lived rotating token (30d)"),
+  accessTokenExpiresAt: zod.coerce.date(),
+  member: zod.object({
+    id: zod.string(),
+    membershipId: zod.string().describe("e.g. AGP-LA-IKE-000245"),
+    fullName: zod.string(),
+    email: zod.string(),
+    phone: zod.string(),
+    state: zod.string(),
+    lga: zod.string(),
+    tier: zod.enum(["member", "premier", "partner"]),
+    joinedAt: zod.coerce.date(),
+    avatarUrl: zod.string().nullish(),
+  }),
+});
+
+/**
+ * @summary Revoke the current refresh token
+ */
+export const AuthLogoutBody = zod.object({
+  refreshToken: zod.string(),
+});
+
+/**
+ * @summary Current member resolved from the access token
+ */
+export const AuthMeResponse = zod.object({
+  id: zod.string(),
+  membershipId: zod.string().describe("e.g. AGP-LA-IKE-000245"),
+  fullName: zod.string(),
+  email: zod.string(),
+  phone: zod.string(),
+  state: zod.string(),
+  lga: zod.string(),
+  tier: zod.enum(["member", "premier", "partner"]),
+  joinedAt: zod.coerce.date(),
+  avatarUrl: zod.string().nullish(),
+});
+
+/**
  * @summary Current member profile
  */
 export const GetMyMemberResponse = zod.object({

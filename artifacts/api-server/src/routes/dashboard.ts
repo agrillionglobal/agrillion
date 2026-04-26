@@ -20,8 +20,8 @@ import {
 
 const router: IRouter = Router();
 
-router.get("/dashboard/summary", async (_req, res) => {
-  const m = await getCurrentMember();
+router.get("/dashboard/summary", async (req, res) => {
+  const m = await getCurrentMember(req.auth?.memberId);
   const w = await getOrCreateWallet(m.id);
 
   const monthStart = new Date();
@@ -118,7 +118,7 @@ router.get("/dashboard/activity", async (req, res) => {
   const params = GetRecentActivityQueryParams.parse({
     limit: req.query.limit ? Number(req.query.limit) : undefined,
   });
-  const m = await getCurrentMember();
+  const m = await getCurrentMember(req.auth?.memberId);
   const limit = params.limit ?? 20;
 
   const utilities = await db
@@ -192,8 +192,8 @@ router.get("/dashboard/activity", async (req, res) => {
   res.json(GetRecentActivityResponse.parse(items.slice(0, limit)));
 });
 
-router.get("/dashboard/notifications", async (_req, res) => {
-  const m = await getCurrentMember();
+router.get("/dashboard/notifications", async (req, res) => {
+  const m = await getCurrentMember(req.auth?.memberId);
   const rows = await db
     .select()
     .from(notifications)
