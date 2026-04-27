@@ -34,7 +34,7 @@ title = "section nigerian produce flatlay"
 id = "A2UqufS2gG5sdpNNik_h7"
 uri = "file://artifacts/agrillion/public/section-smart.png"
 type = "image"
-title = "section smart phone bills"
+title = "smart-app-no-text"
 
 [[generated]]
 id = "IqFlGTzQKJ0dyUBTdKddi"
@@ -58,7 +58,19 @@ title = "product ofada rice"
 id = "fLxWwxVKeFjDQ-CgzkEZO"
 uri = "file://artifacts/agrillion/public/product-palmoil.png"
 type = "image"
-title = "product palm oil"
+title = "nigerian-red-palm-oil"
+
+[[generated]]
+id = "dh2IxICcFbCNr9E5QlRYN"
+uri = "file://artifacts/agrillion/public/product-chicken.png"
+type = "image"
+title = "free-range-chicken-product"
+
+[[generated]]
+id = "vcS6v4daCa2wk8pZqOS2C"
+uri = "file://artifacts/agrillion/public/project-ricemill.png"
+type = "image"
+title = "nigerian-rice-mill-facility"
 
 [[outputs]]
 id = "R2W-Z-bPo7mXCNF-GAUaX"

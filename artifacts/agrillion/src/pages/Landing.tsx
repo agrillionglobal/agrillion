@@ -336,7 +336,7 @@ export default function Landing() {
               {[
                 { name: "Ofada Rice", price: "₦12,500", units: "or 1,250 SU", img: `${BASE}/product-ofada.png` },
                 { name: "Palm Oil 5L", price: "₦18,500", units: "or 1,850 SU", img: `${BASE}/product-palmoil.png` },
-                { name: "Free-Range Chicken", price: "₦85,000", units: "or 8,500 SU", img: `${BASE}/product-chicken.jpg` },
+                { name: "Free-Range Chicken", price: "₦85,000", units: "or 8,500 SU", img: `${BASE}/product-chicken.png` },
                 { name: "Mambilla Honey", price: "₦11,500", units: "or 1,150 SU", img: `${BASE}/product-honey.jpg` },
               ].map((p) => (
                 <div
@@ -441,7 +441,7 @@ export default function Landing() {
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {(projects.data ?? []).slice(0, 3).map((p, i) => {
               const projectImgs = [
-                `${BASE}/project-ricemill.jpg`,
+                `${BASE}/project-ricemill.png`,
                 `${BASE}/project-cassava.png`,
                 `${BASE}/project-coldstorage.png`,
               ];
